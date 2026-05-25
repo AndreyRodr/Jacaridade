@@ -1,6 +1,6 @@
-# 🐊 Jacaridade - Conectando Corações e Causas
+# 🐊 Care n' Share - Conectando Corações e Causas
 
-O **Jacaridade** é uma plataforma desenvolvida para facilitar a conexão entre doadores e ONGs, permitindo que causas sociais ganhem visibilidade e apoio financeiro de forma rápida e intuitiva.
+O **Care n' Share** é uma plataforma desenvolvida para facilitar a conexão entre doadores e ONGs, permitindo que causas sociais ganhem visibilidade e apoio financeiro de forma rápida e intuitiva.
 
 ## ✨ Funcionalidades Principais
 - **Match de Interesses**: Algoritmo que recomenda ONGs com base nos interesses do usuário.
