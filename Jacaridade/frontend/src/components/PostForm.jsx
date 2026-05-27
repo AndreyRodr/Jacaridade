@@ -7,9 +7,61 @@ const PostForm = ({ onPostCreated }) => {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // compressImage e handleFileChange mantidos iguais...
-  const handleFileChange = (e) => { /* ... logica ...*/ };
-  const handleSubmit = async (e) => { /* ... logica ...*/ };
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1000;
+          let width = img.width;
+          let height = img.height;
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.8));
+        };
+      };
+    });
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const compressed = await compressImage(file);
+      setPreview(compressed);
+      setFormData({ ...formData, image: compressed });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.title || !formData.content) return;
+    
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:3001/api/posts', formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setFormData({ title: '', content: '', image: '' });
+      setPreview(null);
+      if (onPostCreated) onPostCreated();
+      alert('Publicado com sucesso! ✨');
+    } catch (error) {
+      alert('Erro ao publicar. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="post-form-card">
