@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { X, Heart, Copy, Check } from 'lucide-react';
-import { useState } from 'react';
 
 const PixModal = ({ ong, onClose }) => {
   const [copied, setCopied] = useState(false);
@@ -13,32 +12,30 @@ const PixModal = ({ ong, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-cozy-text/60 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-md rounded-[3rem] shadow-2xl p-10 text-center relative overflow-hidden">
-        {/* Decoração de Fundo */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-cozy-accent/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-cozy-pastel-green/20 rounded-full blur-3xl"></div>
+    <div className="modal-overlay" style={{ zIndex: 200 }}>
+      <div className="pix-modal-card">
+        
+        {/* Decoração de Fundo (Simulando os blurs do Tailwind) */}
+        <div style={{ position: 'absolute', top: '-6rem', right: '-6rem', width: '12rem', height: '12rem', backgroundColor: 'rgba(var(--rgb-accent), 0.1)', borderRadius: '50%', filter: 'blur(40px)' }}></div>
+        <div style={{ position: 'absolute', bottom: '-6rem', left: '-6rem', width: '12rem', height: '12rem', backgroundColor: 'rgba(226, 240, 203, 0.2)', borderRadius: '50%', filter: 'blur(40px)' }}></div>
 
-        <button 
-          onClick={onClose}
-          className="absolute top-6 right-6 text-cozy-text/30 hover:text-cozy-text transition-colors"
-        >
-          <X className="w-6 h-6" />
+        <button onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'none', border: 'none', color: 'rgba(var(--rgb-text), 0.3)', cursor: 'pointer', transition: 'color 0.3s' }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--cozy-text)'} onMouseOut={(e) => e.currentTarget.style.color = 'rgba(var(--rgb-text), 0.3)'}>
+          <X size={24} />
         </button>
 
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-cozy-accent/20 rounded-[2rem] mb-6">
-          <Heart className="w-10 h-10 text-cozy-accent fill-cozy-accent animate-pulse" />
+        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '5rem', height: '5rem', backgroundColor: 'rgba(var(--rgb-accent), 0.2)', borderRadius: '2rem', marginBottom: '1.5rem' }}>
+          <Heart size={40} color="var(--cozy-accent)" fill="var(--cozy-accent)" />
         </div>
 
-        <h2 className="text-3xl font-black text-cozy-text mb-2">Apoio Confirmado!</h2>
-        <p className="text-cozy-text/60 mb-8 font-light italic">
-          Obrigado por apoiar a <span className="font-bold text-cozy-accent">{ong.name}</span>. 
+        <h2 style={{ fontSize: '1.875rem', fontWeight: 900, marginBottom: '0.5rem' }}>Apoio Confirmado!</h2>
+        <p style={{ color: 'rgba(var(--rgb-text), 0.6)', marginBottom: '2rem', fontWeight: 300, fontStyle: 'italic' }}>
+          Obrigado por apoiar a <span style={{ fontWeight: 'bold', color: 'var(--cozy-accent)' }}>{ong.name}</span>. 
           Se desejar, faça uma doação via PIX:
         </p>
 
         {ong.pixKey ? (
-          <div className="flex flex-col items-center">
-            <div className="bg-white p-6 rounded-[2.5rem] shadow-xl shadow-cozy-accent/10 mb-6 border border-cozy-accent/5">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '2.5rem', boxShadow: '0 20px 25px -5px rgba(var(--rgb-accent), 0.1)', marginBottom: '1.5rem', border: '1px solid rgba(var(--rgb-accent), 0.05)' }}>
               <QRCodeCanvas 
                 value={ong.pixKey} 
                 size={200}
@@ -55,28 +52,38 @@ const PixModal = ({ ong, onClose }) => {
               />
             </div>
 
-            <div className="w-full bg-cozy-bg p-4 rounded-2xl flex items-center justify-between gap-4 border border-cozy-accent/5">
-              <code className="text-xs font-bold text-cozy-text/60 truncate flex-1 text-left">
+            <div style={{ width: '100%', backgroundColor: 'var(--cozy-bg)', padding: '1rem', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '1px solid rgba(var(--rgb-accent), 0.05)' }}>
+              <code style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'rgba(var(--rgb-text), 0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1, textAlign: 'left' }}>
                 {ong.pixKey}
               </code>
               <button 
                 onClick={handleCopy}
-                className={`p-2 rounded-xl transition-all ${copied ? 'bg-green-100 text-green-600' : 'bg-cozy-accent/10 text-cozy-accent hover:bg-cozy-accent/20'}`}
+                style={{
+                  padding: '0.5rem', 
+                  borderRadius: '0.75rem', 
+                  border: 'none', 
+                  cursor: 'pointer', 
+                  transition: 'all 0.3s',
+                  backgroundColor: copied ? 'rgba(226, 240, 203, 1)' : 'rgba(var(--rgb-accent), 0.1)',
+                  color: copied ? '#15803d' : 'var(--cozy-accent)'
+                }}
               >
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check size={16} /> : <Copy size={16} />}
               </button>
             </div>
-            {copied && <span className="text-[10px] font-bold text-green-600 mt-2 uppercase tracking-widest">Copiado!</span>}
+            {copied && <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#15803d', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Copiado!</span>}
           </div>
         ) : (
-          <div className="py-10 px-6 bg-cozy-bg rounded-[2rem] border-2 border-dashed border-cozy-accent/10">
-            <p className="text-sm text-cozy-text/40 italic">Esta ONG ainda não cadastrou uma chave PIX para doações diretas.</p>
+          <div style={{ padding: '2.5rem 1.5rem', backgroundColor: 'var(--cozy-bg)', borderRadius: '2rem', border: '2px dashed rgba(var(--rgb-accent), 0.1)' }}>
+            <p style={{ fontSize: '0.875rem', color: 'rgba(var(--rgb-text), 0.4)', fontStyle: 'italic' }}>Esta ONG ainda não cadastrou uma chave PIX para doações diretas.</p>
           </div>
         )}
 
         <button 
           onClick={onClose}
-          className="w-full mt-10 py-4 text-cozy-text/40 font-bold text-sm hover:text-cozy-text transition-colors"
+          style={{ width: '100%', marginTop: '2.5rem', padding: '1rem', background: 'none', border: 'none', color: 'rgba(var(--rgb-text), 0.4)', fontWeight: 'bold', fontSize: '0.875rem', cursor: 'pointer', transition: 'color 0.3s' }}
+          onMouseOver={(e) => e.currentTarget.style.color = 'var(--cozy-text)'} 
+          onMouseOut={(e) => e.currentTarget.style.color = 'rgba(var(--rgb-text), 0.4)'}
         >
           Fechar e continuar navegando
         </button>

@@ -16,76 +16,70 @@ const Login = () => {
       const response = await axios.post('http://localhost:3001/api/login', { email, password });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      window.location.href = '/'; // Redirecionar forçando recarregamento
+      window.location.href = '/'; 
     } catch (err) {
       setError(err.response?.data?.error || 'Erro ao realizar login. Tente novamente.');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl shadow-cozy-accent/10 p-8 border border-cozy-accent/5">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-cozy-accent/20 rounded-2xl mb-4">
-            <Heart className="text-cozy-accent w-8 h-8 fill-cozy-accent" />
+    <div className="login-wrapper">
+      <div className="login-card">
+        <div className="login-header">
+          <div className="login-icon-wrapper">
+            <Heart className="login-icon" />
           </div>
-          <h1 className="text-3xl font-bold text-cozy-text mb-2">Bem-vindo de volta</h1>
-          <p className="text-cozy-text/60">Ficamos felizes em ver você novamente por aqui.</p>
+          <h1 className="login-title">Bem-vindo de volta</h1>
+          <p className="login-subtitle">Ficamos felizes em ver você novamente por aqui.</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-cozy-pastel-pink/30 border border-cozy-pastel-pink text-red-600 rounded-xl text-sm text-center">
+          <div className="login-error">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-cozy-text/70 mb-2 ml-1">E-mail</label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cozy-accent/40" />
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label>E-mail</label>
+            <div className="input-wrapper">
+              <Mail className="input-icon" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="exemplo@email.com"
-                className="w-full pl-12 pr-4 py-3 bg-cozy-bg rounded-2xl border-none focus:ring-2 focus:ring-cozy-accent/30 outline-none transition-all placeholder:text-cozy-text/30"
+                className="form-input"
                 required
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-cozy-text/70 mb-2 ml-1">Senha</label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cozy-accent/40" />
+          <div className="form-group">
+            <label>Senha</label>
+            <div className="input-wrapper">
+              <Lock className="input-icon" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-12 pr-4 py-3 bg-cozy-bg rounded-2xl border-none focus:ring-2 focus:ring-cozy-accent/30 outline-none transition-all placeholder:text-cozy-text/30"
+                className="form-input"
                 required
               />
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-4 bg-cozy-accent text-white font-semibold rounded-2xl shadow-lg shadow-cozy-accent/30 hover:bg-cozy-accent/90 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
-          >
+          <button type="submit" className="btn-submit">
             Entrar
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight />
           </button>
         </form>
 
-        <div className="mt-10 text-center">
-          <p className="text-cozy-text/50">
+        <div className="login-footer">
+          <p>
             Ainda não tem uma conta?{' '}
-            <button
-              onClick={() => navigate('/register')}
-              className="text-cozy-accent font-bold hover:underline"
-            >
+            <button onClick={() => navigate('/register')}>
               Crie uma agora
             </button>
           </p>

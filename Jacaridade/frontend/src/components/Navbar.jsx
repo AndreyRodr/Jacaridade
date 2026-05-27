@@ -13,38 +13,28 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md border-b border-cozy-accent/10 sticky top-0 z-50 px-6 py-4">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="bg-cozy-accent/20 p-2 rounded-xl">
-            <Heart className="w-6 h-6 text-cozy-accent fill-cozy-accent" />
+    <nav className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-logo" onClick={() => navigate('/')}>
+          <div className="navbar-logo-icon">
+            <Heart className="icon-heart" />
           </div>
-          <span className="text-xl font-bold text-cozy-text tracking-tight">Jacaridade</span>
+          <span className="navbar-title">Jacaridade</span>
         </div>
 
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => navigate('/profile/edit')}
-            className="flex items-center gap-2 px-4 py-2 text-cozy-text/70 hover:text-cozy-accent hover:bg-cozy-accent/5 rounded-xl transition-all"
-          >
+        <div className="navbar-actions">
+          <button onClick={() => navigate('/profile/edit')} className="btn-nav btn-edit">
             <UserCircle className="w-5 h-5" />
-            <span className="hidden sm:inline font-medium">Editar Perfil</span>
+            <span>Editar Perfil</span>
           </button>
           
-          <button 
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 text-red-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-          >
+          <button onClick={handleLogout} className="btn-nav btn-logout">
             <LogOut className="w-5 h-5" />
-            <span className="hidden sm:inline font-medium">Sair</span>
+            <span>Sair</span>
           </button>
 
           {user?.profilePicture && (
-            <img 
-              src={user.profilePicture} 
-              alt="Perfil" 
-              className="w-10 h-10 rounded-full border-2 border-cozy-accent/20 object-cover ml-2"
-            />
+            <img src={user.profilePicture} alt="Perfil" className="navbar-avatar" />
           )}
         </div>
       </div>

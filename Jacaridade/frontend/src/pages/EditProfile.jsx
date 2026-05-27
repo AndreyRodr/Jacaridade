@@ -85,11 +85,9 @@ const EditProfile = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      // Atualizar LocalStorage
       localStorage.setItem('user', JSON.stringify(response.data));
       setMessage({ type: 'success', text: 'Perfil atualizado com sucesso! Redirecionando... ✨' });
       
-      // Forçar recarregamento para atualizar Navbar e Feed
       setTimeout(() => {
         window.location.href = '/';
       }, 1500);
@@ -102,124 +100,114 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cozy-bg">
+    <div className="app-wrapper">
       <Navbar />
 
-      <main className="max-w-2xl mx-auto px-6 py-12">
-        <button 
-          onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-cozy-text/50 hover:text-cozy-accent mb-8 transition-colors group"
-        >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+      <main style={{ maxWidth: '42rem', margin: '0 auto', padding: '3rem 1.5rem' }}>
+        <button onClick={() => navigate('/')} className="btn-back">
+          <ArrowLeft size={20} />
           <span>Voltar para o Feed</span>
         </button>
 
-        <div className="bg-white rounded-[3rem] shadow-xl shadow-cozy-accent/5 p-10 border border-cozy-accent/5">
-          <div className="mb-10 text-center">
-            <h1 className="text-3xl font-bold text-cozy-text mb-2">Personalizar Perfil</h1>
-            <p className="text-cozy-text/50">Deixe sua marca na comunidade Jacaridade.</p>
+        <div className="login-card" style={{ maxWidth: '100%' }}>
+          <div className="login-header" style={{ marginBottom: '2.5rem' }}>
+            <h1 className="login-title">Personalizar Perfil</h1>
+            <p className="login-subtitle">Deixe sua marca na comunidade Jacaridade.</p>
           </div>
 
           {message.text && (
-            <div className={`mb-8 p-4 rounded-2xl text-sm text-center border ${
+            <div className={`login-error ${message.type === 'success' ? 'success-msg' : ''}`} style={
               message.type === 'success' 
-              ? 'bg-cozy-pastel-green/30 border-cozy-pastel-green text-green-700' 
-              : 'bg-red-50 border-red-100 text-red-600'
-            }`}>
+              ? { backgroundColor: 'rgba(226, 240, 203, 0.3)', borderColor: 'var(--cozy-pastel-green)', color: '#15803d' } 
+              : {}
+            }>
               {message.text}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Foto de Perfil */}
-            <div className="flex flex-col items-center">
-              <div className="relative group">
-                <div className="w-32 h-32 rounded-[2.5rem] bg-cozy-bg border-4 border-white shadow-lg overflow-hidden flex items-center justify-center">
-                  {preview ? (
-                    <img src={preview} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-12 h-12 text-cozy-accent/20" />
-                  )}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Camera className="text-white w-8 h-8" />
-                  </div>
-                </div>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ position: 'relative', width: '8rem', height: '8rem', borderRadius: '2.5rem', backgroundColor: 'var(--cozy-bg)', border: '4px solid white', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                {preview ? (
+                  <img src={preview} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <User size={48} color="rgba(var(--rgb-accent), 0.2)" />
+                )}
                 <input 
                   type="file" 
                   onChange={handleFileChange}
                   accept="image/*"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
                 />
               </div>
-              <span className="text-xs font-bold text-cozy-accent mt-4 uppercase tracking-widest">Trocar Foto</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--cozy-accent)', marginTop: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Trocar Foto</span>
             </div>
 
-            <div className="space-y-5">
-              <div className="relative">
-                <label className="text-xs font-bold text-cozy-text/30 uppercase tracking-widest ml-1 mb-2 block">Seu Nome</label>
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cozy-accent/30" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div className="form-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'rgba(var(--rgb-text), 0.3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Seu Nome</label>
+                <div className="input-wrapper">
+                  <User className="input-icon" size={20} />
                   <input 
                     type="text" 
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full pl-12 pr-4 py-4 bg-cozy-bg rounded-2xl border-none focus:ring-2 focus:ring-cozy-accent/20 outline-none transition-all"
+                    className="form-input"
                     placeholder="Seu nome"
                   />
                 </div>
               </div>
 
-              <div className="relative">
-                <label className="text-xs font-bold text-cozy-text/30 uppercase tracking-widest ml-1 mb-2 block">E-mail de Contato</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cozy-accent/30" />
+              <div className="form-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'rgba(var(--rgb-text), 0.3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>E-mail de Contato</label>
+                <div className="input-wrapper">
+                  <Mail className="input-icon" size={20} />
                   <input 
                     type="email" 
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full pl-12 pr-4 py-4 bg-cozy-bg rounded-2xl border-none focus:ring-2 focus:ring-cozy-accent/20 outline-none transition-all"
+                    className="form-input"
                     placeholder="seu@email.com"
                   />
                 </div>
               </div>
 
-              <div className="relative">
-                <label className="text-xs font-bold text-cozy-text/30 uppercase tracking-widest ml-1 mb-2 block">Bio / Interesses</label>
+              <div className="form-group" style={{ position: 'relative' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'rgba(var(--rgb-text), 0.3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bio / Interesses</label>
                 <textarea 
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   rows="4"
-                  className="w-full px-4 py-4 bg-cozy-bg rounded-2xl border-none focus:ring-2 focus:ring-cozy-accent/20 outline-none transition-all resize-none"
+                  className="form-input"
+                  style={{ paddingLeft: '1rem', resize: 'none' }}
                   placeholder="Conte o que te motiva a ajudar..."
                 ></textarea>
-                <div className="absolute right-4 bottom-4 flex items-center gap-1.5 opacity-30">
-                  <Sparkles className="w-4 h-4 text-cozy-accent" />
-                  <span className="text-[10px] font-bold">Influencia seu match</span>
+                <div style={{ position: 'absolute', right: '1rem', bottom: '1rem', display: 'flex', alignItems: 'center', gap: '4px', opacity: 0.3 }}>
+                  <Sparkles size={16} color="var(--cozy-accent)" />
+                  <span style={{ fontSize: '10px', fontWeight: 'bold' }}>Influencia seu match</span>
                 </div>
               </div>
 
               {JSON.parse(localStorage.getItem('user'))?.type === 'O' && (
-                <div className="relative animate-in slide-in-from-top duration-300">
-                  <label className="text-xs font-bold text-cozy-text/30 uppercase tracking-widest ml-1 mb-2 block">Chave PIX da ONG</label>
+                <div className="form-group">
+                  <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'rgba(var(--rgb-text), 0.3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Chave PIX da ONG</label>
                   <input 
                     type="text" 
                     value={formData.pixKey}
                     onChange={(e) => setFormData({...formData, pixKey: e.target.value})}
-                    className="w-full px-4 py-4 bg-cozy-pastel-green/10 border border-cozy-pastel-green/20 rounded-2xl outline-none focus:ring-2 focus:ring-cozy-pastel-green/30 transition-all text-sm font-bold"
+                    className="form-input input-pix"
+                    style={{ paddingLeft: '1rem', fontWeight: 'bold' }}
                     placeholder="E-mail, CPF, CNPJ ou Chave Aleatória"
                   />
-                  <p className="text-[10px] text-cozy-text/40 mt-2 ml-1 italic">Essa chave aparecerá para os apoiadores gerarem o QR Code.</p>
+                  <p style={{ fontSize: '10px', color: 'rgba(var(--rgb-text), 0.4)', marginTop: '0.5rem', fontStyle: 'italic' }}>Essa chave aparecerá para os apoiadores gerarem o QR Code.</p>
                 </div>
               )}
             </div>
 
-            <button 
-              type="submit"
-              disabled={loading}
-              className="w-full py-5 bg-cozy-accent text-white font-black rounded-2xl shadow-xl shadow-cozy-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-            >
+            <button type="submit" disabled={loading} className="btn-submit" style={{ padding: '1.25rem', fontWeight: 900 }}>
               {loading ? 'Salvando...' : (
-                <> <Save className="w-5 h-5" /> Salvar Alterações </>
+                <> <Save size={20} /> Salvar Alterações </>
               )}
             </button>
           </form>
